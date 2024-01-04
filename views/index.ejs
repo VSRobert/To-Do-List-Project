@@ -1,0 +1,52 @@
+<%- include('partials/header.ejs'); -%>
+
+  <div class="box" id="heading">
+    <h1>
+      <%= listTitle %>
+    </h1>
+  </div>
+  <div class="box">
+    <% for(let item of listItems){%>
+      <div class="item" style="display: flex; align-items: center;">
+  
+        <p id="title<%=item.id%>" style="margin-left: 20px; flex-grow: 1;">
+          <%= item.title %>
+        </p>
+  
+        <form action="/delete" method="post">
+          <button id="delete-button" type="submit" name="deleteItemId" value="<%= item.id %>" style="padding: 0px; border: 0px; background-color: white;">
+            <img src="/assets/icons/trash.svg" alt="delete button" />
+          </button>
+        </form>
+  
+        <form class="edit" action="/edit" method="post" style="margin-left: 0px;">
+          <input type="hidden" name="updatedItemId" value="<%= item.id %>">
+          <input id="input<%=item.id%>" type="text" name="updatedItemTitle" value="<%= item.title %>" autocomplete="off" autofocus="true" hidden="true" />
+          <button id="done<%=item.id%>" class="edit" type="submit" hidden>
+            <img class="icon" src="/assets/icons/check-solid.svg" alt="tick image">
+          </button>
+        </form>
+  
+        <button id="edit<%=item.id%>" class="edit" onclick="handler('<%=item.id%>')">
+          <img class="icon" src="/assets/icons/pencil-solid.svg" alt="pencil image">
+        </button>
+  
+      </div>
+    <% } %>
+  
+    <form class="item" action="/add" method="post">
+      <input type="text" name="newItem" placeholder="New Item" autocomplete="off" autofocus="true" />
+      <button class="add" type="submit" name="list" value=<%=listTitle %> >+</button>
+    </form>
+  </div>
+  
+
+  <script>
+    function handler(id) {
+      document.getElementById("title" + id).setAttribute("hidden", true) //all these are hidden buttons.
+      document.getElementById("edit" + id).setAttribute("hidden", true)  //this one is the pencil for edit
+      document.getElementById("done" + id).removeAttribute("hidden") //this one is the "ok" sign to confirm the edit.
+      document.getElementById("input" + id).removeAttribute("hidden") //this change the actual paragraph in an input in order for you to type the modification
+    }
+  </script>
+  <%- include('partials/footer.ejs'); -%>
